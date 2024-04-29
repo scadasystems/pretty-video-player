@@ -24,19 +24,19 @@ class PrettyManager {
     /// Auto-play video once initialized.
     bool autoPlay = true,
   }) : this.getPlayerControlsTimeout = getPlayerControlsTimeout ?? getPlayerControlsTimeoutDefault {
-    _flickControlManager = PrettyControlManager(
-      flickManager: this,
+    _prettyControlManager = PrettyControlManager(
+      prettyManager: this,
     );
-    _flickVideoManager = PrettyVideoManager(flickManager: this, autoPlay: autoPlay, autoInitialize: autoInitialize);
-    _flickDisplayManager = PrettyDisplayManager(
-      flickManager: this,
+    _prettyVideoManager = PrettyVideoManager(prettyManager: this, autoPlay: autoPlay, autoInitialize: autoInitialize);
+    _prettyDisplayManager = PrettyDisplayManager(
+      prettyManager: this,
     );
-    _flickVideoManager!._handleChangeVideo(videoPlayerController);
+    _prettyVideoManager!._handleChangeVideo(videoPlayerController);
   }
 
-  PrettyVideoManager? _flickVideoManager;
-  PrettyControlManager? _flickControlManager;
-  PrettyDisplayManager? _flickDisplayManager;
+  PrettyVideoManager? _prettyVideoManager;
+  PrettyControlManager? _prettyControlManager;
+  PrettyDisplayManager? _prettyDisplayManager;
   BuildContext? _context;
 
   /// Video end callback, change the video in this callback.
@@ -49,9 +49,9 @@ class PrettyManager {
   /// else timeout is 3 seconds.
   GetPlayerControlsTimeout getPlayerControlsTimeout;
 
-  PrettyVideoManager? get flickVideoManager => _flickVideoManager;
-  PrettyDisplayManager? get flickDisplayManager => _flickDisplayManager;
-  PrettyControlManager? get flickControlManager => _flickControlManager;
+  PrettyVideoManager? get prettyVideoManager => _prettyVideoManager;
+  PrettyDisplayManager? get prettyDisplayManager => _prettyDisplayManager;
+  PrettyControlManager? get prettyControlManager => _prettyControlManager;
   BuildContext? get context => _context;
 
   registerContext(BuildContext context) {
@@ -64,41 +64,41 @@ class PrettyManager {
   /// if [videoChangeDuration] is passed video change will happen after that duration.
   handleChangeVideo(VideoPlayerController videoPlayerController,
       {Duration? videoChangeDuration, TimerCancelCallback? timerCancelCallback}) {
-    _flickVideoManager!._handleChangeVideo(videoPlayerController,
+    _prettyVideoManager!._handleChangeVideo(videoPlayerController,
         videoChangeDuration: videoChangeDuration, timerCancelCallback: timerCancelCallback);
   }
 
   _handleToggleFullscreen() {
-    _flickDisplayManager!._handleToggleFullscreen();
+    _prettyDisplayManager!._handleToggleFullscreen();
   }
 
   _handleVideoEnd() {
     if (onVideoEnd != null) {
       onVideoEnd!();
     }
-    _flickDisplayManager!._handleVideoEnd();
+    _prettyDisplayManager!._handleVideoEnd();
   }
 
   _handleErrorInVideo() {
-    _flickDisplayManager!._handleErrorInVideo();
+    _prettyDisplayManager!._handleErrorInVideo();
   }
 
   _handleVideoSeek({required bool forward}) {
     // assert(forward != null);
-    _flickDisplayManager!._handleVideoSeek(forward: forward);
+    _prettyDisplayManager!._handleVideoSeek(forward: forward);
   }
 
   _handleVolumeChange({required double volume}) {
     // assert(forward != null);
-    _flickDisplayManager!._handleVolumeChange(volume);
+    _prettyDisplayManager!._handleVolumeChange(volume);
   }
 
-  /// Dispose the flick manager.
+  /// Dispose the pretty manager.
   ///
   /// This internally disposes all the supporting managers.
   dispose() {
-    _flickControlManager!.dispose();
-    _flickDisplayManager!.dispose();
-    _flickVideoManager!.dispose();
+    _prettyControlManager!.dispose();
+    _prettyDisplayManager!.dispose();
+    _prettyVideoManager!.dispose();
   }
 }

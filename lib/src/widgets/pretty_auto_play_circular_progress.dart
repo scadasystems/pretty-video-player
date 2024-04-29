@@ -1,5 +1,5 @@
-import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:provider/provider.dart';
 
 /// Circular progress bar which uses autoPlayNextVideo timeout duration.
@@ -33,12 +33,12 @@ class PrettyAutoPlayCircularProgress extends StatefulWidget {
 
   /// Widget shown in the center of progress indicator.
   ///
-  /// Default action - [flickVideoManager.cancelAutoPlayTimer] is called with [playNext] set to true and next video starts playing immediately.
+  /// Default action - [prettyVideoManager.cancelAutoPlayTimer] is called with [playNext] set to true and next video starts playing immediately.
   final Widget playChild;
 
   /// Widget shown after progress indicator.
   ///
-  /// Default action - [flickVideoManager.cancelAutoPlayTimer] is called with [playNext] set to false.
+  /// Default action - [prettyVideoManager.cancelAutoPlayTimer] is called with [playNext] set to false.
   final Widget cancelChild;
 
   /// Called on tap of [playChild].

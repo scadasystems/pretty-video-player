@@ -1,8 +1,8 @@
-import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:provider/provider.dart';
 
-/// GestureDetector that calls [flickDisplayManager.togglePlay] onTap of opaque area/child.
+/// GestureDetector that calls [prettyDisplayManager.togglePlay] onTap of opaque area/child.
 class PrettyTogglePlayAction extends StatelessWidget {
   const PrettyTogglePlayAction({Key? key, this.child, this.behavior = HitTestBehavior.opaque, this.togglePlay})
       : super(key: key);

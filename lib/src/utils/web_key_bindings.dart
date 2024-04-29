@@ -1,27 +1,27 @@
 import 'package:pretty_video_player/src/manager/pretty_manager.dart';
 import 'package:universal_html/html.dart';
 
-void prettyDefaultWebKeyDownHandler(KeyboardEvent event, PrettyManager flickManager) {
+void prettyDefaultWebKeyDownHandler(KeyboardEvent event, PrettyManager prettyManager) {
   if (event.keyCode == 70) {
-    flickManager.flickControlManager?.toggleFullscreen();
-    flickManager.flickDisplayManager?.handleShowPlayerControls();
+    prettyManager.prettyControlManager?.toggleFullscreen();
+    prettyManager.prettyDisplayManager?.handleShowPlayerControls();
   } else if (event.keyCode == 77) {
-    flickManager.flickControlManager?.toggleMute();
-    flickManager.flickDisplayManager?.handleShowPlayerControls();
+    prettyManager.prettyControlManager?.toggleMute();
+    prettyManager.prettyDisplayManager?.handleShowPlayerControls();
   } else if (event.keyCode == 39) {
-    flickManager.flickControlManager?.seekForward(Duration(seconds: 10));
-    flickManager.flickDisplayManager?.handleShowPlayerControls();
+    prettyManager.prettyControlManager?.seekForward(Duration(seconds: 10));
+    prettyManager.prettyDisplayManager?.handleShowPlayerControls();
   } else if (event.keyCode == 37) {
-    flickManager.flickControlManager?.seekBackward(Duration(seconds: 10));
-    flickManager.flickDisplayManager?.handleShowPlayerControls();
+    prettyManager.prettyControlManager?.seekBackward(Duration(seconds: 10));
+    prettyManager.prettyDisplayManager?.handleShowPlayerControls();
   } else if (event.keyCode == 32) {
-    flickManager.flickControlManager?.togglePlay();
-    flickManager.flickDisplayManager?.handleShowPlayerControls();
+    prettyManager.prettyControlManager?.togglePlay();
+    prettyManager.prettyDisplayManager?.handleShowPlayerControls();
   } else if (event.keyCode == 38) {
-    flickManager.flickControlManager?.increaseVolume(0.05);
-    flickManager.flickDisplayManager?.handleShowPlayerControls();
+    prettyManager.prettyControlManager?.increaseVolume(0.05);
+    prettyManager.prettyDisplayManager?.handleShowPlayerControls();
   } else if (event.keyCode == 40) {
-    flickManager.flickControlManager?.decreaseVolume(0.05);
-    flickManager.flickDisplayManager?.handleShowPlayerControls();
+    prettyManager.prettyControlManager?.decreaseVolume(0.05);
+    prettyManager.prettyDisplayManager?.handleShowPlayerControls();
   }
 }

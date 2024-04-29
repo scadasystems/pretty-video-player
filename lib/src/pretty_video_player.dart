@@ -1,19 +1,19 @@
-import 'package:pretty_video_player/pretty_video_player.dart';
-import 'package:pretty_video_player/src/utils/web_key_bindings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pretty_video_player/pretty_video_player.dart';
+import 'package:pretty_video_player/src/utils/web_key_bindings.dart';
 import 'package:universal_html/html.dart';
 import 'package:wakelock/wakelock.dart';
 
 class PrettyVideoPlayer extends StatefulWidget {
   const PrettyVideoPlayer({
     Key? key,
-    required this.flickManager,
-    this.flickVideoWithControls = const PrettyVideoWithControls(
+    required this.prettyManager,
+    this.prettyVideoWithControls = const PrettyVideoWithControls(
       controls: const PrettyPortraitControls(),
     ),
-    this.flickVideoWithControlsFullscreen,
+    this.prettyVideoWithControlsFullscreen,
     this.systemUIOverlay = SystemUiOverlay.values,
     this.systemUIOverlayFullscreen = const [],
     this.preferredDeviceOrientation = const [
@@ -29,13 +29,13 @@ class PrettyVideoPlayer extends StatefulWidget {
     this.webKeyDownHandler = prettyDefaultWebKeyDownHandler,
   }) : super(key: key);
 
-  final PrettyManager flickManager;
+  final PrettyManager prettyManager;
 
   /// Widget to render video and controls.
-  final Widget flickVideoWithControls;
+  final Widget prettyVideoWithControls;
 
   /// Widget to render video and controls in full-screen.
-  final Widget? flickVideoWithControlsFullscreen;
+  final Widget? prettyVideoWithControlsFullscreen;
 
   /// SystemUIOverlay to show.
   ///
@@ -69,7 +69,7 @@ class PrettyVideoPlayer extends StatefulWidget {
 }
 
 class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindingObserver {
-  late PrettyManager flickManager;
+  late PrettyManager prettyManager;
   bool _isFullscreen = false;
   OverlayEntry? _overlayEntry;
   double? _videoWidth;
@@ -78,9 +78,9 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    flickManager = widget.flickManager;
-    flickManager.registerContext(context);
-    flickManager.flickControlManager!.addListener(listener);
+    prettyManager = widget.prettyManager;
+    prettyManager.registerContext(context);
+    prettyManager.prettyControlManager!.addListener(listener);
     _setSystemUIOverlays();
     _setPreferredOrientation();
 
@@ -98,7 +98,7 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
 
   @override
   void dispose() {
-    flickManager.flickControlManager!.removeListener(listener);
+    prettyManager.prettyControlManager!.removeListener(listener);
     if (widget.wakelockEnabled) {
       Wakelock.disable();
     }
@@ -109,18 +109,18 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
   @override
   Future<bool> didPopRoute() async {
     if (_overlayEntry != null) {
-      flickManager.flickControlManager!.exitFullscreen();
+      prettyManager.prettyControlManager!.exitFullscreen();
       return true;
     }
     return false;
   }
 
-  // Listener on [FlickControlManager],
-  // Pushes the full-screen if [FlickControlManager] is changed to full-screen.
+  // Listener on [prettyControlManager],
+  // Pushes the full-screen if [prettyControlManager] is changed to full-screen.
   void listener() async {
-    if (flickManager.flickControlManager!.isFullscreen && !_isFullscreen) {
+    if (prettyManager.prettyControlManager!.isFullscreen && !_isFullscreen) {
       _switchToFullscreen();
-    } else if (_isFullscreen && !flickManager.flickControlManager!.isFullscreen) {
+    } else if (_isFullscreen && !prettyManager.prettyControlManager!.isFullscreen) {
       _exitFullscreen();
     }
   }
@@ -146,8 +146,8 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
       _overlayEntry = OverlayEntry(builder: (context) {
         return Scaffold(
           body: PrettyManagerBuilder(
-            flickManager: flickManager,
-            child: widget.flickVideoWithControlsFullscreen ?? widget.flickVideoWithControls,
+            prettyManager: prettyManager,
+            child: widget.prettyVideoWithControlsFullscreen ?? widget.prettyVideoWithControls,
           ),
         );
       });
@@ -180,7 +180,7 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
 
   _setPreferredOrientation() {
     // when aspect ratio is less than 1 , video will be played in portrait mode and orientation will not be changed.
-    var aspectRatio = widget.flickManager.flickVideoManager!.videoPlayerValue!.aspectRatio;
+    var aspectRatio = widget.prettyManager.prettyVideoManager!.videoPlayerValue!.aspectRatio;
     if (_isFullscreen && aspectRatio >= 1) {
       SystemChrome.setPreferredOrientations(widget.preferredDeviceOrientationFullscreen);
     } else {
@@ -198,15 +198,15 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
 
   void _webFullscreenListener(Event event) {
     final isFullscreen = (window.screenTop == 0 && window.screenY == 0);
-    if (isFullscreen && !flickManager.flickControlManager!.isFullscreen) {
-      flickManager.flickControlManager!.enterFullscreen();
-    } else if (!isFullscreen && flickManager.flickControlManager!.isFullscreen) {
-      flickManager.flickControlManager!.exitFullscreen();
+    if (isFullscreen && !prettyManager.prettyControlManager!.isFullscreen) {
+      prettyManager.prettyControlManager!.enterFullscreen();
+    } else if (!isFullscreen && prettyManager.prettyControlManager!.isFullscreen) {
+      prettyManager.prettyControlManager!.exitFullscreen();
     }
   }
 
   void _webKeyListener(KeyboardEvent event) {
-    widget.webKeyDownHandler(event, flickManager);
+    widget.webKeyDownHandler(event, prettyManager);
   }
 
   @override
@@ -215,8 +215,8 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
       width: _videoWidth,
       height: _videoHeight,
       child: PrettyManagerBuilder(
-        flickManager: flickManager,
-        child: widget.flickVideoWithControls,
+        prettyManager: prettyManager,
+        child: widget.prettyVideoWithControls,
       ),
     );
   }

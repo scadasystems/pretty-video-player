@@ -1,8 +1,8 @@
-import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:provider/provider.dart';
 
-/// GestureDetector that calls [flickDisplayManager.handleVideoTap] onTap of opaque area/child.
+/// GestureDetector that calls [prettyDisplayManager.handleVideoTap] onTap of opaque area/child.
 class PrettyShowControlsActionWeb extends StatelessWidget {
   const PrettyShowControlsActionWeb({Key? key, this.child, this.behavior = HitTestBehavior.opaque, this.handleVideoTap})
       : super(key: key);

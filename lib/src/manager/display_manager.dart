@@ -4,12 +4,12 @@ part of pretty_manager;
 class PrettyDisplayManager extends ChangeNotifier {
   /// Manages display related properties like auto-hide controls.
   PrettyDisplayManager({
-    PrettyManager? flickManager,
-  }) : _flickManager = flickManager {
+    PrettyManager? prettyManager,
+  }) : _prettyManager = prettyManager {
     handleShowPlayerControls();
   }
 
-  final PrettyManager? _flickManager;
+  final PrettyManager? _prettyManager;
   bool _mounted = true;
   Timer? _showPlayerControlsTimer;
   Timer? _showVolumeLevelTimer;
@@ -61,11 +61,11 @@ class PrettyDisplayManager extends ChangeNotifier {
       // Timer duration fetched through channel, passing the current player information.
 
       _showPlayerControlsTimer = Timer(
-          _flickManager!.getPlayerControlsTimeout(
-            errorInVideo: _flickManager!.flickVideoManager!.errorInVideo,
-            isVideoInitialized: _flickManager!.flickVideoManager!.isVideoInitialized,
-            isPlaying: _flickManager!.flickVideoManager!.isPlaying,
-            isVideoEnded: _flickManager!.flickVideoManager!.isVideoEnded,
+          _prettyManager!.getPlayerControlsTimeout(
+            errorInVideo: _prettyManager!.prettyVideoManager!.errorInVideo,
+            isVideoInitialized: _prettyManager!.prettyVideoManager!.isVideoInitialized,
+            isPlaying: _prettyManager!.prettyVideoManager!.isPlaying,
+            isVideoEnded: _prettyManager!.prettyVideoManager!.isVideoEnded,
           ), () {
         _showPlayerControls = false;
         _notify();

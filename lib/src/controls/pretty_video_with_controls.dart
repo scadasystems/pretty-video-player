@@ -1,5 +1,5 @@
-import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -57,26 +57,26 @@ class PrettyVideoWithControls extends StatefulWidget {
 
   /// Used in [DefaultTextStyle]
   ///
-  /// Use this property if you require to override the text style provided by the default Flick widgets.
+  /// Use this property if you require to override the text style provided by the default pretty widgets.
   ///
-  /// If any text style property is passed to Flick Widget at the time of widget creation, that style wont be overridden.
+  /// If any text style property is passed to pretty Widget at the time of widget creation, that style wont be overridden.
   final TextStyle textStyle;
 
   /// Used in [DefaultTextStyle]
   ///
   /// Use this property if you require to override the text style provided by the default ClosedCaption widgets.
   ///
-  /// If any text style property is passed to Flick Widget at the time of widget creation, that style wont be overridden.
+  /// If any text style property is passed to pretty Widget at the time of widget creation, that style wont be overridden.
   final TextStyle closedCaptionTextStyle;
 
   /// Used in [IconTheme]
   ///
-  /// Use this property if you require to override the icon style provided by the default Flick widgets.
+  /// Use this property if you require to override the icon style provided by the default pretty widgets.
   ///
-  /// If any icon style is passed to Flick Widget at the time of widget creation, that style wont be overridden.
+  /// If any icon style is passed to pretty Widget at the time of widget creation, that style wont be overridden.
   final IconThemeData iconThemeData;
 
-  /// If [FlickPlayer] has unbounded constraints this aspectRatio is used to take the size on the screen.
+  /// If [prettyPlayer] has unbounded constraints this aspectRatio is used to take the size on the screen.
   ///
   /// Once the video is initialized, video determines size taken.
   final double aspectRatioWhenLoading;

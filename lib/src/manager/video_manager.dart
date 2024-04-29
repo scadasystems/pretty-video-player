@@ -6,10 +6,10 @@ typedef TimerCancelCallback(bool playNext);
 ///
 /// Responsible to maintain life-cycle of [VideoPlayerController].
 class PrettyVideoManager extends ChangeNotifier {
-  PrettyVideoManager({required PrettyManager flickManager, required this.autoPlay, required this.autoInitialize})
-      : _flickManager = flickManager;
+  PrettyVideoManager({required PrettyManager prettyManager, required this.autoPlay, required this.autoInitialize})
+      : _prettyManager = prettyManager;
 
-  final PrettyManager _flickManager;
+  final PrettyManager _prettyManager;
   bool _currentVideoEnded = false;
   bool _isBuffering = false;
   Timer? _nextVideoAutoPlayTimer;
@@ -41,7 +41,7 @@ class PrettyVideoManager extends ChangeNotifier {
   ///
   ///  Use this duration to show next video auto-play progress indicators.
   ///
-  /// This is the duration passed by the user in [flickManager.handleChangeVideo]
+  /// This is the duration passed by the user in [prettyManager.handleChangeVideo]
   Duration? get nextVideoAutoPlayDuration => _nextVideoAutoPlayDuration;
 
   /// [videoPlayerController.value]
@@ -104,7 +104,7 @@ class PrettyVideoManager extends ChangeNotifier {
     //  Change the videoPlayerController with the new controller,
     // notify the controller change and remove listeners from the old controller.
     VideoPlayerController? oldController = videoPlayerController;
-    _flickManager.flickControlManager!.pause();
+    _prettyManager.prettyControlManager!.pause();
     _videoPlayerController = newController;
     oldController?.removeListener(_videoListener);
     videoPlayerController!.addListener(_videoListener);
@@ -118,12 +118,12 @@ class PrettyVideoManager extends ChangeNotifier {
     Future.delayed(Duration(seconds: 5), () => oldController?.dispose());
 
     // Initialize the video if not initialized
-    // (User can initialize the video while passing to flick).
+    // (User can initialize the video while passing to pretty).
     if (!videoPlayerController!.value.isInitialized && autoInitialize) {
       try {
         await videoPlayerController!.initialize();
       } catch (err) {
-        _flickManager._handleErrorInVideo();
+        _prettyManager._handleErrorInVideo();
       }
     }
 
@@ -133,14 +133,14 @@ class PrettyVideoManager extends ChangeNotifier {
       videoPlayerController!.seekTo(Duration(hours: 0, minutes: 0, seconds: 0, milliseconds: 0));
     }
 
-    if (autoPlay && ModalRoute.of(_flickManager._context!)!.isCurrent) {
+    if (autoPlay && ModalRoute.of(_prettyManager._context!)!.isCurrent) {
       //Chrome's autoplay policies are simple:
       //Muted autoplay is always allowed.
-      if (kIsWeb) _flickManager.flickControlManager!.mute();
-      // if (kIsWeb) _flickManager.flickControlManager!.setVolume(0.5);
+      if (kIsWeb) _prettyManager.prettyControlManager!.mute();
+      // if (kIsWeb) _prettyManager.prettyControlManager!.setVolume(0.5);
 
       // Start playing the video.
-      _flickManager.flickControlManager!.play();
+      _prettyManager.prettyControlManager!.play();
     }
 
     _notify();
@@ -166,7 +166,7 @@ class PrettyVideoManager extends ChangeNotifier {
         cancelVideoAutoPlayTimer();
         // Due to some bug in video player, have to play the video again after
         // video is seek or replayed once ended.
-        _flickManager.flickControlManager!.play();
+        _prettyManager.prettyControlManager!.play();
       }
     }
 
@@ -184,7 +184,7 @@ class PrettyVideoManager extends ChangeNotifier {
   // Called when the current playing video is ended.
   handleVideoEnd() {
     _currentVideoEnded = true;
-    _flickManager._handleVideoEnd();
+    _prettyManager._handleVideoEnd();
   }
 
   _notify() {

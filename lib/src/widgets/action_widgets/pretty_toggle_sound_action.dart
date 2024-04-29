@@ -1,8 +1,8 @@
-import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:provider/provider.dart';
 
-/// GestureDetector that calls [flickControlManager.toggleMute] onTap of opaque area/child.
+/// GestureDetector that calls [prettyControlManager.toggleMute] onTap of opaque area/child.
 class PrettyToggleSoundAction extends StatelessWidget {
   const PrettyToggleSoundAction({Key? key, this.child, this.behavior = HitTestBehavior.opaque, this.toggleMute})
       : super(key: key);

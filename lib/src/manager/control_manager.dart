@@ -2,14 +2,14 @@ part of pretty_manager;
 
 /// Manages action on video player like play, mute and others.
 ///
-/// FlickControlManager helps user interact with the player,
+/// prettyControlManager helps user interact with the player,
 /// like change play state, change volume, seek video, enter/exit full-screen.
 class PrettyControlManager extends ChangeNotifier {
   PrettyControlManager({
-    required PrettyManager flickManager,
-  }) : _flickManager = flickManager;
+    required PrettyManager prettyManager,
+  }) : _prettyManager = prettyManager;
 
-  final PrettyManager _flickManager;
+  final PrettyManager _prettyManager;
   bool _mounted = true;
 
   bool _isMute = false;
@@ -27,20 +27,20 @@ class PrettyControlManager extends ChangeNotifier {
   /// Is subtitle visible.
   bool get isSub => _isSub;
 
-  VideoPlayerController? get _videoPlayerController => _flickManager.flickVideoManager!.videoPlayerController;
-  bool get _isPlaying => _flickManager.flickVideoManager!.isPlaying;
+  VideoPlayerController? get _videoPlayerController => _prettyManager.prettyVideoManager!.videoPlayerController;
+  bool get _isPlaying => _prettyManager.prettyVideoManager!.isPlaying;
 
   /// Enter full-screen.
   void enterFullscreen() {
     _isFullscreen = true;
-    _flickManager._handleToggleFullscreen();
+    _prettyManager._handleToggleFullscreen();
     _notify();
   }
 
   /// Exit full-screen.
   void exitFullscreen() {
     _isFullscreen = false;
-    _flickManager._handleToggleFullscreen();
+    _prettyManager._handleToggleFullscreen();
     _notify();
   }
 
@@ -74,7 +74,7 @@ class PrettyControlManager extends ChangeNotifier {
     }
 
     await _videoPlayerController!.play();
-    _flickManager.flickDisplayManager!.handleShowPlayerControls();
+    _prettyManager.prettyDisplayManager!.handleShowPlayerControls();
     _notify();
   }
 
@@ -91,7 +91,7 @@ class PrettyControlManager extends ChangeNotifier {
   /// Pause the video.
   Future<void> pause() async {
     await _videoPlayerController?.pause();
-    _flickManager.flickDisplayManager!.handleShowPlayerControls(showWithTimeout: false);
+    _prettyManager.prettyDisplayManager!.handleShowPlayerControls(showWithTimeout: false);
     _notify();
   }
 
@@ -110,13 +110,13 @@ class PrettyControlManager extends ChangeNotifier {
 
   /// Seek video forward by the duration.
   Future<void> seekForward(Duration videoSeekDuration) async {
-    _flickManager._handleVideoSeek(forward: true);
+    _prettyManager._handleVideoSeek(forward: true);
     await seekTo(_videoPlayerController!.value.position + videoSeekDuration);
   }
 
   /// Seek video backward by the duration.
   Future<void> seekBackward(Duration videoSeekDuration) async {
-    _flickManager._handleVideoSeek(forward: false);
+    _prettyManager._handleVideoSeek(forward: false);
     await seekTo(
       _videoPlayerController!.value.position - videoSeekDuration,
     );
@@ -195,7 +195,7 @@ class PrettyControlManager extends ChangeNotifier {
     final volumeAfterIncrease = currentVolume + increaseBy;
     final volume = _verifyVolumeBounds(volumeAfterIncrease);
     await setVolume(volume);
-    _flickManager._handleVolumeChange(volume: volume);
+    _prettyManager._handleVolumeChange(volume: volume);
   }
 
   /// Decrease volume between 0.0 - 1.0,
@@ -205,7 +205,7 @@ class PrettyControlManager extends ChangeNotifier {
     final volumeAfterDecrease = currentVolume - decreaseBy;
     final volume = _verifyVolumeBounds(volumeAfterDecrease);
     await setVolume(volume);
-    _flickManager._handleVolumeChange(volume: volume);
+    _prettyManager._handleVolumeChange(volume: volume);
   }
 
   double _verifyVolumeBounds(double volume) {

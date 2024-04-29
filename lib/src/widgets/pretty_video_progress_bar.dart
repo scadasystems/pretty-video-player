@@ -1,6 +1,6 @@
-import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -10,11 +10,11 @@ class PrettyVideoProgressBar extends StatelessWidget {
     this.onDragEnd,
     this.onDragStart,
     this.onDragUpdate,
-    PrettyProgressBarSettings? flickProgressBarSettings,
-  }) : flickProgressBarSettings =
-            flickProgressBarSettings != null ? flickProgressBarSettings : PrettyProgressBarSettings();
+    PrettyProgressBarSettings? prettyProgressBarSettings,
+  }) : prettyProgressBarSettings =
+            prettyProgressBarSettings != null ? prettyProgressBarSettings : PrettyProgressBarSettings();
 
-  final PrettyProgressBarSettings flickProgressBarSettings;
+  final PrettyProgressBarSettings prettyProgressBarSettings;
   final Function()? onDragStart;
   final Function()? onDragEnd;
   final Function()? onDragUpdate;
@@ -40,13 +40,13 @@ class PrettyVideoProgressBar extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         child: Container(
           width: size.maxWidth,
-          padding: flickProgressBarSettings.padding,
+          padding: prettyProgressBarSettings.padding,
           child: Container(
-            height: flickProgressBarSettings.height,
+            height: prettyProgressBarSettings.height,
             child: CustomPaint(
               painter: _ProgressBarPainter(
                 videoPlayerValue,
-                flickProgressBarSettings: flickProgressBarSettings,
+                prettyProgressBarSettings: prettyProgressBarSettings,
               ),
             ),
           ),
@@ -55,7 +55,7 @@ class PrettyVideoProgressBar extends StatelessWidget {
           if (!videoPlayerValue.isInitialized) {
             return;
           }
-          // _controllerWasPlaying = flickControlManager.isPlaying;
+          // _controllerWasPlaying = prettyControlManager.isPlaying;
           if (videoManager.isPlaying) {
             controlManager.autoPause();
           }
@@ -93,10 +93,10 @@ class PrettyVideoProgressBar extends StatelessWidget {
 }
 
 class _ProgressBarPainter extends CustomPainter {
-  _ProgressBarPainter(this.value, {this.flickProgressBarSettings});
+  _ProgressBarPainter(this.value, {this.prettyProgressBarSettings});
 
   VideoPlayerValue value;
-  PrettyProgressBarSettings? flickProgressBarSettings;
+  PrettyProgressBarSettings? prettyProgressBarSettings;
 
   @override
   bool shouldRepaint(CustomPainter painter) {
@@ -105,18 +105,18 @@ class _ProgressBarPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double height = flickProgressBarSettings!.height;
+    double height = prettyProgressBarSettings!.height;
     double width = size.width;
-    double curveRadius = flickProgressBarSettings!.curveRadius;
-    double handleRadius = flickProgressBarSettings!.handleRadius;
-    Paint backgroundPaint = flickProgressBarSettings!.getBackgroundPaint != null
-        ? flickProgressBarSettings!.getBackgroundPaint!(
+    double curveRadius = prettyProgressBarSettings!.curveRadius;
+    double handleRadius = prettyProgressBarSettings!.handleRadius;
+    Paint backgroundPaint = prettyProgressBarSettings!.getBackgroundPaint != null
+        ? prettyProgressBarSettings!.getBackgroundPaint!(
             width: width,
             height: height,
             handleRadius: handleRadius,
           )
         : Paint()
-      ..color = flickProgressBarSettings!.backgroundColor;
+      ..color = prettyProgressBarSettings!.backgroundColor;
 
     canvas.drawRRect(
       RRect.fromRectAndRadius(
@@ -139,8 +139,8 @@ class _ProgressBarPainter extends CustomPainter {
       final double start = range.startFraction(value.duration) * width;
       final double end = range.endFraction(value.duration) * width;
 
-      Paint bufferedPaint = flickProgressBarSettings!.getBufferedPaint != null
-          ? flickProgressBarSettings!.getBufferedPaint!(
+      Paint bufferedPaint = prettyProgressBarSettings!.getBufferedPaint != null
+          ? prettyProgressBarSettings!.getBufferedPaint!(
               width: width,
               height: height,
               playedPart: playedPart,
@@ -148,7 +148,7 @@ class _ProgressBarPainter extends CustomPainter {
               bufferedStart: start,
               bufferedEnd: end)
           : Paint()
-        ..color = flickProgressBarSettings!.bufferedColor;
+        ..color = prettyProgressBarSettings!.bufferedColor;
 
       canvas.drawRRect(
         RRect.fromRectAndRadius(
@@ -162,15 +162,15 @@ class _ProgressBarPainter extends CustomPainter {
       );
     }
 
-    Paint playedPaint = flickProgressBarSettings!.getPlayedPaint != null
-        ? flickProgressBarSettings!.getPlayedPaint!(
+    Paint playedPaint = prettyProgressBarSettings!.getPlayedPaint != null
+        ? prettyProgressBarSettings!.getPlayedPaint!(
             width: width,
             height: height,
             playedPart: playedPart,
             handleRadius: handleRadius,
           )
         : Paint()
-      ..color = flickProgressBarSettings!.playedColor;
+      ..color = prettyProgressBarSettings!.playedColor;
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromPoints(
@@ -182,15 +182,15 @@ class _ProgressBarPainter extends CustomPainter {
       playedPaint,
     );
 
-    Paint handlePaint = flickProgressBarSettings!.getHandlePaint != null
-        ? flickProgressBarSettings!.getHandlePaint!(
+    Paint handlePaint = prettyProgressBarSettings!.getHandlePaint != null
+        ? prettyProgressBarSettings!.getHandlePaint!(
             width: width,
             height: height,
             playedPart: playedPart,
             handleRadius: handleRadius,
           )
         : Paint()
-      ..color = flickProgressBarSettings!.handleColor;
+      ..color = prettyProgressBarSettings!.handleColor;
 
     canvas.drawCircle(
       Offset(playedPart, height / 2),

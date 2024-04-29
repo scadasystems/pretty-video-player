@@ -1,5 +1,5 @@
-import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:pretty_video_player/pretty_video_player.dart';
 
 /// Default portrait controls.
 class PrettyPortraitControls extends StatelessWidget {
@@ -53,7 +53,7 @@ class PrettyPortraitControls extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   PrettyVideoProgressBar(
-                    flickProgressBarSettings: progressBarSettings,
+                    prettyProgressBarSettings: progressBarSettings,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
