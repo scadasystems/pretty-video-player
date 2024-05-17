@@ -1,8 +1,7 @@
-import 'package:pretty_video_player/pretty_video_player.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 
 /// Show a widget based on the full-screen state of the player and toggle the same.
+/*
 class PrettyFullScreenToggle extends StatelessWidget {
   const PrettyFullScreenToggle(
       {Key? key,
@@ -80,3 +79,4 @@ class PrettyFullScreenToggle extends StatelessWidget {
     );
   }
 }
+*/

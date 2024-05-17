@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:pretty_video_player/src/utils/web_key_bindings.dart';
-import 'package:universal_html/html.dart';
-import 'package:wakelock/wakelock.dart';
+// import 'package:universal_html/html.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:web/web.dart' as html;
 
 class PrettyVideoPlayer extends StatefulWidget {
   const PrettyVideoPlayer({
@@ -62,7 +63,7 @@ class PrettyVideoPlayer extends StatefulWidget {
   final bool wakelockEnabledFullscreen;
 
   /// Callback called on keyDown for web, used for keyboard shortcuts.
-  final Function(KeyboardEvent, PrettyManager) webKeyDownHandler;
+  final Function(html.KeyboardEvent, PrettyManager) webKeyDownHandler;
 
   @override
   _PrettyVideoPlayerState createState() => _PrettyVideoPlayerState();
@@ -85,12 +86,12 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
     _setPreferredOrientation();
 
     if (widget.wakelockEnabled) {
-      Wakelock.enable();
+      WakelockPlus.enable();
     }
 
     if (kIsWeb) {
-      document.documentElement?.onFullscreenChange.listen(_webFullscreenListener);
-      document.documentElement?.onKeyDown.listen(_webKeyListener);
+      html.document.documentElement?.onFullscreenChange.listen(_webFullscreenListener);
+      html.document.documentElement?.onKeyDown.listen(_webKeyListener);
     }
 
     super.initState();
@@ -100,7 +101,7 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
   void dispose() {
     prettyManager.prettyControlManager!.removeListener(listener);
     if (widget.wakelockEnabled) {
-      Wakelock.disable();
+      WakelockPlus.disable();
     }
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -128,15 +129,15 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
   _switchToFullscreen() {
     if (widget.wakelockEnabledFullscreen) {
       /// Disable previous wakelock setting.
-      Wakelock.disable();
-      Wakelock.enable();
+      WakelockPlus.disable();
+      WakelockPlus.enable();
     }
 
     _isFullscreen = true;
     _setPreferredOrientation();
     _setSystemUIOverlays();
     if (kIsWeb) {
-      document.documentElement?.requestFullscreen();
+      // http.document.documentElement?.requestFullscreen();
       Future.delayed(Duration(milliseconds: 100), () {
         _videoHeight = MediaQuery.of(context).size.height;
         _videoWidth = MediaQuery.of(context).size.width;
@@ -159,14 +160,14 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
   _exitFullscreen() {
     if (widget.wakelockEnabled) {
       /// Disable previous wakelock setting.
-      Wakelock.disable();
-      Wakelock.enable();
+      WakelockPlus.disable();
+      WakelockPlus.enable();
     }
 
     _isFullscreen = false;
 
     if (kIsWeb) {
-      document.exitFullscreen();
+      // html.document.exitFullscreen();
       _videoHeight = null;
       _videoWidth = null;
       setState(() {});
@@ -196,8 +197,8 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
     }
   }
 
-  void _webFullscreenListener(Event event) {
-    final isFullscreen = (window.screenTop == 0 && window.screenY == 0);
+  void _webFullscreenListener(html.Event event) {
+    final isFullscreen = (html.window.screenTop == 0 && html.window.screenY == 0);
     if (isFullscreen && !prettyManager.prettyControlManager!.isFullscreen) {
       prettyManager.prettyControlManager!.enterFullscreen();
     } else if (!isFullscreen && prettyManager.prettyControlManager!.isFullscreen) {
@@ -205,7 +206,7 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
     }
   }
 
-  void _webKeyListener(KeyboardEvent event) {
+  void _webKeyListener(html.KeyboardEvent event) {
     widget.webKeyDownHandler(event, prettyManager);
   }
 

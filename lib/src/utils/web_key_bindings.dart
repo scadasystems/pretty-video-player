@@ -1,5 +1,5 @@
 import 'package:pretty_video_player/src/manager/pretty_manager.dart';
-import 'package:universal_html/html.dart';
+import 'package:web/web.dart';
 
 void prettyDefaultWebKeyDownHandler(KeyboardEvent event, PrettyManager prettyManager) {
   if (event.keyCode == 70) {

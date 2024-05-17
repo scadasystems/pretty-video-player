@@ -95,9 +95,7 @@ class PrettyPortraitControls extends StatelessWidget {
                       SizedBox(
                         width: iconSize / 2,
                       ),
-                      PrettyFullScreenToggle(
-                        size: iconSize,
-                      ),
+                      // PrettyFullScreenToggle(size: iconSize),
                     ],
                   ),
                 ],
