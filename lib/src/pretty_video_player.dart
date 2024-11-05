@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pretty_video_player/pretty_video_player.dart';
 import 'package:pretty_video_player/src/utils/web_key_bindings.dart';
-// import 'package:universal_html/html.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:web/web.dart' as html;
 
 class PrettyVideoPlayer extends StatefulWidget {
@@ -25,8 +23,6 @@ class PrettyVideoPlayer extends StatefulWidget {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight
     ],
-    this.wakelockEnabled = true,
-    this.wakelockEnabledFullscreen = true,
     this.webKeyDownHandler = prettyDefaultWebKeyDownHandler,
   }) : super(key: key);
 
@@ -54,14 +50,6 @@ class PrettyVideoPlayer extends StatefulWidget {
   /// Preferred device orientation in full-screen.
   final List<DeviceOrientation> preferredDeviceOrientationFullscreen;
 
-  /// Prevents the screen from turning off automatically.
-  ///
-  /// Use [wakeLockEnabledFullscreen] to manage wakelock for full-screen.
-  final bool wakelockEnabled;
-
-  /// Prevents the screen from turning off automatically in full-screen.
-  final bool wakelockEnabledFullscreen;
-
   /// Callback called on keyDown for web, used for keyboard shortcuts.
   final Function(html.KeyboardEvent, PrettyManager) webKeyDownHandler;
 
@@ -85,10 +73,6 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
     _setSystemUIOverlays();
     _setPreferredOrientation();
 
-    if (widget.wakelockEnabled) {
-      WakelockPlus.enable();
-    }
-
     if (kIsWeb) {
       html.document.documentElement?.onFullscreenChange.listen(_webFullscreenListener);
       html.document.documentElement?.onKeyDown.listen(_webKeyListener);
@@ -100,9 +84,6 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
   @override
   void dispose() {
     prettyManager.prettyControlManager!.removeListener(listener);
-    if (widget.wakelockEnabled) {
-      WakelockPlus.disable();
-    }
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -127,12 +108,6 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
   }
 
   _switchToFullscreen() {
-    if (widget.wakelockEnabledFullscreen) {
-      /// Disable previous wakelock setting.
-      WakelockPlus.disable();
-      WakelockPlus.enable();
-    }
-
     _isFullscreen = true;
     _setPreferredOrientation();
     _setSystemUIOverlays();
@@ -158,12 +133,6 @@ class _PrettyVideoPlayerState extends State<PrettyVideoPlayer> with WidgetsBindi
   }
 
   _exitFullscreen() {
-    if (widget.wakelockEnabled) {
-      /// Disable previous wakelock setting.
-      WakelockPlus.disable();
-      WakelockPlus.enable();
-    }
-
     _isFullscreen = false;
 
     if (kIsWeb) {
